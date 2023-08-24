@@ -5,7 +5,8 @@ from logging_config import logger
 
 def fixed_comp(df, rule_list, mean_series, std_series):
     """
-    Checks for SPC rule violations when the standard deviation and mean are fixed by the user.
+    Prepare the dataframe for analysis and reintroduce the index at the end of the operation. A new set of index
+    which starts at zero and increment by 1 is used for operation. The original indices are added after operation.
     """
     index = "Index"
     data1 = "LevelValue"

@@ -8,6 +8,7 @@ This is an implementation of Statistical Process Control(SPC) rules for evaluati
 1. [Input](#2-input)
    1. [Quality Control (QC) Data](#21-quality-control-qc-data)
    1. [Rules List](#22-rules-list)
+   1. [Level List](#23-level-list)
    1. [Examples of Complete Requests](#23-examples-of-complete-requests)
 1. [Output](#3-output)
 
@@ -48,7 +49,7 @@ An effective quality control system should possess the ability to identify and r
 
 ### 2.1 Quality Control (QC) Data
 
-The expected input data is in Json format. The maximum simultaneous quality control runs the program can handle is 6. The program is, however, easily scalable to any number of simultaneous runs. Six is the requirement when the program was developed.
+The expected input data is in Json format. The maximum simultaneous quality control runs the program can handle is 6. The program is, however, easily scalable to any number of simultaneous runs. Six was the requirement when the program was being developed.
 
 ### 2.2 Rules List
 
@@ -56,7 +57,11 @@ A list of SPC rules that need to be checked should be passed as a list of string
 
 `["1-2s", "1-2.5s","1-3s","1-3.5s","1-4s","1-5s","2-2s","R-4s","3-1s","4-1s","7-T","7-x","8-x","9-x","10-x","12-x"]`
 
-### 2.3 Example of a complete Requests
+### 2.3 Level List
+
+A list of levels that need to be checked should be passed as a list of strings. `level_list : [1, 3, ...]`. 
+
+### 2.4 Example of a complete Requests
 
 ```json
 {
@@ -96,7 +101,8 @@ A list of SPC rules that need to be checked should be passed as a list of string
             ]
         }
         ],
-    "rule_list": ["1-2s", "1-3s"]
+    "rule_list": ["1-2s", "1-3s"],
+    "level_list": [1, 2]
 }
 ```
 

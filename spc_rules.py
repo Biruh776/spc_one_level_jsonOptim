@@ -4,7 +4,7 @@ import pandas as pd
 class Spc_quality_control:
     """
     This class defines a spc_quality control object and provides definitions for spc rules that are applied on a single
-     level.
+    level.
     """
 
     def __init__(self, lev1, mean, std):
@@ -21,7 +21,6 @@ class Spc_quality_control:
     def r1_25s(self):
         """
         The 1-2.5s rule indicates random error and may also point to systematic error.
-        This rule is applied within the run only.
         Indicates an observation is outside ±2.5SD range
         """
         return self._check_diff(2.5)
@@ -37,7 +36,6 @@ class Spc_quality_control:
         """
         The 1-3.5s rule indicates random error and may also indicate systematic error.
         The run is considered out of control when one control value exceeds the mean ±3.5SD.
-        This rule is applied within the run only.
         """
         return self._check_diff(3.5)
 
@@ -45,7 +43,6 @@ class Spc_quality_control:
         """
         Violation of the 1-4s rule indicates random error and may also point to systematic error.
         The run is considered out of control when one control value exceeds the mean ±4SD.
-        This rule is applied within the run only.
         """
         return self._check_diff(4)
 
@@ -53,7 +50,6 @@ class Spc_quality_control:
         """
         Violation of this rule indicates random error and may also point to systematic error.
         The run is considered out of control when one control value exceeds the mean ±5SD.
-        This rule is applied within the run only.
         """
         return self._check_diff(5)
 

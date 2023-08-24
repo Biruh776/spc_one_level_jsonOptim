@@ -24,7 +24,12 @@ def process_json():
     except:
         logger.critical("\"rule_list\" missing or not formatted properly")
 
-    result = output.output(qc_data, rule_list)
+    try:
+        level_list = input_data["level_list"]
+    except:
+        logger.critical("\"level_list\" missing or not formatted properly")
+
+    result = output.output(qc_data, rule_list, level_list)
 
     return jsonify(result)
 
