@@ -43,16 +43,17 @@ def output(qc_data, rule_list, level_list):
     result_store = []
 
     for dff in final_dataframes:
-        level_val = dff['level'].iloc[0]
-        # Compute the results for the required levels
-        if level_val in level_list:
-            mean_series = dff['mean'].copy()
-            std_series = dff['sd'].copy()
-            df_single = dff[['index', 'value']].copy()
-            fixed_res = fixed.fixed_comp(df_single, rule_list, mean_series, std_series)
-            new_df = pd.concat([fixed_res, dff['level']], axis=1)
+        if dff.size != 0:
+            level_val = dff['level'].iloc[0]
+            # Compute the results for the required levels
+            if level_val in level_list:
+                mean_series = dff['mean'].copy()
+                std_series = dff['sd'].copy()
+                df_single = dff[['index', 'value']].copy()
+                fixed_res = fixed.fixed_comp(df_single, rule_list, mean_series, std_series)
+                new_df = pd.concat([fixed_res, dff['level']], axis=1)
 
-            result_store.append(new_df)
+                result_store.append(new_df)
 
     if result_store:
         # Initialize an empty dictionary to store the JSON data
