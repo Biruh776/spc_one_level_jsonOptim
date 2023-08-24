@@ -28,8 +28,8 @@ def one_level(val1, rules, mean_series, std_series):
     """
     :param val1: A pandas Series containing floats.
     :param rules: A list of SPC rules to be checked
-    :param std: a list of mean values
-    :param mean: a list of standard deviation values
+    :param std_series: a list of mean values
+    :param mean_series: a list of standard deviation values
     :return: A pandas Dataframe with columns 'Level1Value' and 'Level1Violation'
     """
     df = pd.DataFrame({'LevelValue': val1.astype(float), 'LevelViolation': ''})

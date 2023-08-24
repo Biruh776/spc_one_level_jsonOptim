@@ -88,32 +88,15 @@ class Spc_quality_control:
         """
         violations = []
         sd_dist = (self.lev1 - self.mean) / self.std
+        min_value = sd_dist.min()
 
         for i in range(0, len(self.lev1)):
-            if ((sd_dist[i]-sd_dist).abs() >= 4).any():
+            if sd_dist[i] - min_value >= 4:
                 violations.append(True)
             else:
                 violations.append(False)
 
         return violations
-
-    # def r4_s(self):
-    #     """
-    #     The R-4s rule identifies random error.
-    #     This rule is violated when there is at least a 4SD difference between consecutive control values.
-    #     """
-    #     violations = [False]
-    #
-    #     for i in range(1, len(self.lev1)):
-    #         curr = self.lev1[i]
-    #         prev = self.lev1[i - 1]
-    #
-    #         if abs(curr - prev) / self.std[i] >= 4:
-    #             violations.append(True)
-    #         else:
-    #             violations.append(False)
-    #
-    #     return pd.Series(violations)
 
     def r3_1s(self):
         """
