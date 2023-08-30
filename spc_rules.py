@@ -68,9 +68,9 @@ class Spc_quality_control:
             curr_deviation = curr - self.mean[i]
             prev_deviation = prev - self.mean[i-1]
 
-            if curr_deviation > 2 * self.std[i] and prev_deviation > 2 * self.std[i]:
+            if curr_deviation > 2 * self.std[i] and prev_deviation > 2 * self.std[i-1]:
                 violations.append(True)
-            elif curr_deviation < -2 * self.std[i] and prev_deviation < -2 * self.std[i]:
+            elif curr_deviation < -2 * self.std[i] and prev_deviation < -2 * self.std[i-1]:
                 violations.append(True)
             else:
                 violations.append(False)
