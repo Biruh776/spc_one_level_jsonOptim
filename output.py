@@ -1,5 +1,9 @@
 import pandas as pd
 import fixed
+import cProfile
+from time_test_json import qc_data, rule_list, level_list
+import pstats
+from pstats import SortKey
 
 
 def output(qc_data, rule_list, level_list):
@@ -82,3 +86,9 @@ def output(qc_data, rule_list, level_list):
     final_json = list(json_data.values())
 
     return final_json
+
+
+if __name__ == "__main__":
+    cProfile.run("output(qc_data, rule_list, level_list)", 'restats')
+    p = pstats.Stats('restats')
+    p.sort_stats(SortKey.CUMULATIVE).print_stats(50)

@@ -11,6 +11,7 @@ class Spc_quality_control:
         self.lev1 = lev1
         self.mean = mean
         self.std = std
+        self.std_bool = self.std.astype(bool)
 
     def r1_2s(self):
         """
@@ -66,32 +67,51 @@ class Spc_quality_control:
             prev = self.lev1[i - 1]
 
             curr_deviation = curr - self.mean[i]
-            prev_deviation = prev - self.mean[i-1]
+            prev_deviation = prev - self.mean[i - 1]
 
-            if curr_deviation > 2 * self.std[i] and prev_deviation > 2 * self.std[i-1]:
+            if (
+                    curr_deviation > 2 * self.std[i] and
+                    prev_deviation > 2 * self.std[i - 1] and
+                    self.std_bool[i] and self.std_bool[i - 1]
+            ):
                 violations.append(True)
-            elif curr_deviation < -2 * self.std[i] and prev_deviation < -2 * self.std[i-1]:
+            elif (
+                    curr_deviation < -2 * self.std[i] and
+                    prev_deviation < -2 * self.std[i - 1] and
+                    self.std_bool[i] and self.std_bool[i - 1]
+            ):
                 violations.append(True)
             else:
                 violations.append(False)
 
         return pd.Series(violations)
 
+    # def r2_3_2s(self):
+    #     """
+    #     This rule is violated when two of three consecutive values are more the 2SD on the same side of the mean.
+    #     The rule identifies systematic error.
+    #     """
+    #     filter_result = pd.Series(False, index=self.lev1.index)
+    #     for i in range(len(self.lev1) - 3 + 1):
+    #         window = self.lev1[i: i + 3]
+    #         window_mean = self.mean[i: i + 3]
+    #         window_std = self.std[i: i + 3]
+    #         if (sum(window < window_mean - 2 * window_std) == 2 or
+    #                 sum(window > window_mean + 2 * window_std) == 2):
+    #             filter_result[i + 3 - 1] = True
+    #
+    #     return filter_result
+
     def r4_s(self):
         """
         The R-4s rule identifies random error.
-        This rule is violated when there is at least a 4SD difference between any two control values among the runs.
+        This rule is violated when the difference between the rolling min and the current value is more than 4SD.
+        Where SD is the current standard deviation.
         """
-        violations = []
-        sd_dist = (self.lev1 - self.mean) / self.std
-        min_value = sd_dist.min()
-
-        for i in range(0, len(self.lev1)):
-            if sd_dist[i] - min_value >= 4:
-                violations.append(True)
-            else:
-                violations.append(False)
-
+        # Calculate the rolling minimum
+        rolling_min = self.lev1.expanding().min()
+        violations = (self.lev1 - rolling_min) >= 4 * self.std
+        violations = violations & self.std_bool
         return violations
 
     def r3_1s(self):
@@ -112,13 +132,15 @@ class Spc_quality_control:
             if (
                     curr_deviation > self.std[i] and
                     prev_deviation > self.std[i - 1] and
-                    prev2_deviation > self.std[i - 2]
+                    prev2_deviation > self.std[i - 2] and
+                    self.std_bool[i] and self.std_bool[i - 1] and self.std_bool[i - 2]
             ):
                 violations.append(True)
             elif (
                     curr_deviation < -self.std[i] and
                     prev_deviation < -self.std[i - 1] and
-                    prev2_deviation < -self.std[i - 2]
+                    prev2_deviation < -self.std[i - 2] and
+                    self.std_bool[i] and self.std_bool[i - 1] and self.std_bool[i - 2]
             ):
                 violations.append(True)
             else:
@@ -147,14 +169,18 @@ class Spc_quality_control:
                     curr_deviation > self.std[i] and
                     prev_deviation > self.std[i - 1] and
                     prev2_deviation > self.std[i - 2] and
-                    prev3_deviation > self.std[i - 3]
+                    prev3_deviation > self.std[i - 3] and
+                    self.std_bool[i] and self.std_bool[i - 1] and
+                    self.std_bool[i - 2] and self.std_bool[i - 3]
             ):
                 violations.append(True)
             elif (
                     curr_deviation < -self.std[i] and
                     prev_deviation < -self.std[i - 1] and
                     prev2_deviation < -self.std[i - 2] and
-                    prev3_deviation < -self.std[i - 3]
+                    prev3_deviation < -self.std[i - 3] and
+                    self.std_bool[i] and self.std_bool[i - 1] and
+                    self.std_bool[i - 2] and self.std_bool[i - 3]
             ):
                 violations.append(True)
             else:
@@ -233,4 +259,5 @@ class Spc_quality_control:
         filter_result = pd.Series(False, index=self.lev1.index)
         mean_diff = self.lev1 - self.mean
         filter_result = mean_diff.abs() > n * self.std
+        filter_result = filter_result & self.std_bool
         return filter_result

@@ -68,6 +68,7 @@ def one_val_mappings():
         '1-4s': 'r1_4s',
         '1-5s': 'r1_5s',
         '2-2s': 'r2_2s',
+        '2/3-2s': 'r2_3_2s',
         'R-4s': 'r4_s',
         '3-1s': 'r3_1s',
         '4-1s': 'r4_1s',
@@ -82,7 +83,7 @@ def one_val_mappings():
 
 
 def all_rules():
-    rule_mapping_all = ["1-2s", "1-2.5s", "1-3s", "1-3.5s", "1-4s", "1-5s", "2-2s", "R-4s", "3-1s", "4-1s",
+    rule_mapping_all = ["1-2s", "1-2.5s", "1-3s", "1-3.5s", "1-4s", "1-5s", "2-2s", "2/3-2s", "R-4s", "3-1s", "4-1s",
                         "7-T", "7-x", "8-x", "9-x", "10-x", "12-x"]
 
     return rule_mapping_all

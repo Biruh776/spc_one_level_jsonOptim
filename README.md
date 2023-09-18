@@ -1,6 +1,6 @@
 ## Overview
 
-This is an implementation of Statistical Process Control(SPC) rules for evaluating analytical run quality for medical laboratories. The program checks for violations against 16 unique rules. The program utilizes pandas, which in turn uses NumPy for computations, making it more efficient.
+This is an implementation of Statistical Process Control(SPC) rules for evaluating analytical run quality for medical laboratories. The program checks for violations against 17 unique rules. The program utilizes pandas, which in turn uses NumPy for computations, making it more efficient.
 
 ## Contents
 
@@ -35,6 +35,8 @@ An effective quality control system should possess the ability to identify and r
 
 1. 2-2s: This rule detects systematic errors. The rule is violated when two consecutive QC results are greater than ±2SD and are on the same side of the mean.
 
+1. 2/3-2s: is triggered if any two of the three or more levels of the same data exceed 2s on the same side of the mean.
+
 1. R-4s: The rule identifies random errors. This rule is violated when there is at least a 4SD difference between any two control values across runs (client requirement).
 
 1. 3-1s: The rule is violated when three consecutive results are greater than ±SD and on the same side of the mean across runs. It shows systematic errors.
@@ -55,7 +57,7 @@ The expected input data is in Json format. The maximum simultaneous quality cont
 
 A list of SPC rules that need to be checked should be passed as a list of strings. `rule_list : ["1-2s", "1-3s",...]`. The full list of all the available rules are
 
-`["1-2s", "1-2.5s","1-3s","1-3.5s","1-4s","1-5s","2-2s","R-4s","3-1s","4-1s","7-T","7-x","8-x","9-x","10-x","12-x"]`
+`["1-2s", "1-2.5s","1-3s","1-3.5s","1-4s","1-5s","2-2s","2/3-2s", "R-4s","3-1s","4-1s","7-T","7-x","8-x","9-x","10-x","12-x"]`
 
 ### 2.3 Level List
 
